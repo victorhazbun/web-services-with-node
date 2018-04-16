@@ -62,7 +62,6 @@ module.exports = (app, elasticsearch) => {
     }
   });
 
-
   /**
    * Put a book into a bundle by its id.
    * curl -X PUT http://<host>:<port>/api/bundle/<id>/book/<pgid>
@@ -148,4 +147,17 @@ module.exports = (app, elasticsearch) => {
     }
   });
 
+  /**
+   * Delete a bundle entirely.
+   * curl -X DELETE http://<host>:<port>/api/bundle/<id>
+   */
+  app.delete('/api/bundle/:id', async (req, res) => {
+    const bundleUrl = `${url}/${req.params.id}`;
+    try {
+      const esResBody = await rp.delete({url: bundleUrl, json: true});
+      res.status(200).json(esResBody);
+    } catch (esResErr) {
+      res.status(esResErr.statusCode || 502).json(esResErr.error);
+    }
+  });
 };
