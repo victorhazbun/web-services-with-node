@@ -15,5 +15,6 @@ app.use(morgan('dev'));
 app.get('/api/version', (req, res) => res.status(200).send(pkg.version));
 
 require('./lib/search.js')(app, nconf.get('elasticsearch'));
+require('./lib/bundle.js')(app, nconf.get('elasticsearch'));
 
 app.listen(nconf.get('port'), () => console.log('Ready.'));
