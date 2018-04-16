@@ -43,7 +43,6 @@ module.exports = (app, elasticsearch) => {
     });
   });
 
-
   /**
    * Collect suggested terms for a given field based on a given query.
    * Example: /api/suggest/authors/lipman
@@ -64,7 +63,7 @@ module.exports = (app, elasticsearch) => {
 
     const options = {url, json: true, body: elasticsearchReqBody};
 
-    const promise = new Promise((resolve, reject) => {
+    /* const promise = new Promise((resolve, reject) => {
       request.get(options, (err, elasticsearchRes, elasticsearchResBody) => {
 
         if (err) {
@@ -79,9 +78,13 @@ module.exports = (app, elasticsearch) => {
 
         resolve(elasticsearchResBody);
       });
-    });
+    });*/
 
-    promise
+    /* promise
+      .then(elasticsearchResBody => res.status(200).json(elasticsearchResBody.suggest.suggestions))
+      .catch(({error}) => res.status(error.status || 502).json(error));*/
+
+    rp(options)
       .then(elasticsearchResBody => res.status(200).json(elasticsearchResBody.suggest.suggestions))
       .catch(({error}) => res.status(error.status || 502).json(error));
 
