@@ -37,7 +37,27 @@ module.exports = (app, es) => {
       const elasticsearchResBody = await rp(options);
       res.status(200).json(elasticsearchResBody);
     } catch (elasticsearchResErr) {
-      console.log(elasticsearchResErr.StatusCodeError)
+      res.status(elasticsearchResErr.statusCode || 502).json(elasticsearchResErr.error);
+    }
+  });
+
+  /**
+   * Set the specified bundle's name with the specified name.
+   * curl -X PUT http://<host>:<port>/api/bundle/<id>/name/<name>
+   */
+  app.put('/api/bundle/:id/name/:name', async (req, res) => {
+    const bundleUrl = `${url}/${req.params.id}`;
+
+    try {
+      const bundle = (await rp({url: bundleUrl, json: true}))._source;
+
+      bundle.name = req.params.name;
+
+      const elasticsearchResBody =
+        await rp.put({url: bundleUrl, body: bundle, json: true});
+      res.status(200).json(elasticsearchResBody);
+
+    } catch (elasticsearchResErr) {
       res.status(elasticsearchResErr.statusCode || 502).json(elasticsearchResErr.error);
     }
   });
