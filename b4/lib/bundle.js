@@ -22,4 +22,23 @@ module.exports = (app, es) => {
       .then(elasticsearchResBody => res.status(201).json(elasticsearchResBody))
       .catch(({error}) => res.status(error.status || 502).json(error));
   });
+
+  /**
+   * Retrieve a given bundle.
+   * curl http://<host>:<port>/api/bundle/<id>
+   */
+  app.get('/api/bundle/:id', async (req, res) => {
+    const options = {
+      url: `${url}/${req.params.id}`,
+      json: true,
+    };
+
+    try {
+      const elasticsearchResBody = await rp(options);
+      res.status(200).json(elasticsearchResBody);
+    } catch (elasticsearchResErr) {
+      console.log(elasticsearchResErr.StatusCodeError)
+      res.status(elasticsearchResErr.statusCode || 502).json(elasticsearchResErr.error);
+    }
+  });
 };
