@@ -6,17 +6,30 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const webpack = require('webpack');
 
 module.exports = {
-  entry: './entry.js',
+  entry: './app/index.ts',
   output: {
     filename: 'bundle.js',
     path: distDir,
   },
+  resolve: {
+    extensions: [".ts", ".tsx", ".js"]
+  },
   devServer: {
     contentBase: distDir,
     port: 60800,
+    proxy: {
+      '/api': 'http://localhost:60702',
+      '/es': {
+        target: 'http://localhost:9200',
+        pathRewrite: {'^/es' : ''},
+      }
+    },
   },
   module: {
     rules: [{
+      test: /\.ts$/,
+      loader: 'ts-loader',
+    },{
       test: /\.css$/,
       use: [ 'style-loader', 'css-loader' ]
     },{
@@ -26,7 +39,7 @@ module.exports = {
   },
   plugins: [
     new HtmlWebpackPlugin({
-      title: 'Better Book Bundle Builder'
+      title: 'Better Book Bundle Builder',
     }),
     new webpack.ProvidePlugin({
       $: 'jquery',
