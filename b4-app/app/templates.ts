@@ -23,3 +23,31 @@ export const alert = Handlebars.compile(`
     {{message}}
   </div>
 `);
+
+export const listBundles = Handlebars.compile(`
+  <div class="panel panel-default">
+    <div class="panel-heading">Your Bundles</div>
+    {{#if bundles.length}}
+      <table class="table">
+        <tr>
+          <th>Bundle Name</th>
+          <th>Actions</th>
+        </tr>
+        {{#each bundles}}
+        <tr>
+          <td>
+            <a href="#view-bundle/{{id}}">{{name}}</a>
+          </td>
+          <td>
+            <button class="btn delete" data-bundle-id="{{id}}">Delete</button>
+          </td>
+        </tr>
+        {{/each}}
+      </table>
+    {{else}}
+      <div class="panel-body">
+        <p>None yet!</p>
+      </div>
+    {{/if}}
+  </div>
+`);
