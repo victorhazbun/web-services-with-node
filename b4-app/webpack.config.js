@@ -19,9 +19,9 @@ module.exports = {
     port: 60800,
     proxy: {
       '/api': 'http://localhost:60702',
-      '/es': {
+      '/elasticsearch': {
         target: 'http://localhost:9200',
-        pathRewrite: {'^/es' : ''},
+        pathRewrite: {'^/elasticsearch' : ''},
       }
     },
   },
