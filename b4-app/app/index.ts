@@ -12,3 +12,20 @@ alertsElement.innerHTML = templates.alert({
   type: 'info',
   message: 'Handlebars is working!',
 });
+
+const showView = async () => {
+  const [view, ...params] = window.location.hash.split('/');
+
+  switch (view) {
+    case '#welcome':
+      mainElement.innerHTML = templates.welcome();
+      break;
+    default:
+      // Unrecognized view.
+      throw Error(`Unrecognized view: ${view}`);
+  }
+};
+
+window.addEventListener('hashchange', showView);
+
+showView().catch(err => window.location.hash = '#welcome');
